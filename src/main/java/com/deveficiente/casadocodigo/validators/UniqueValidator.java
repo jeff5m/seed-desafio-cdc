@@ -1,22 +1,24 @@
 package com.deveficiente.casadocodigo.validators;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import com.deveficiente.casadocodigo.newauthor.Author;
+import com.deveficiente.casadocodigo.newauthor.AuthorRepository;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.Optional;
 
+//1
 public class UniqueValidator implements ConstraintValidator<Unique, String> {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private final AuthorRepository authorRepository;
+
+    public UniqueValidator(AuthorRepository authorRepository) {
+        this.authorRepository = authorRepository;
+    }
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        Long email = (Long) entityManager.createQuery(
-                        "SELECT COUNT (a) FROM Author a WHERE a.email LIKE :email")
-                .setParameter("email", value)
-                .getSingleResult();
-
-        return email == 0;
+        Optional<Author> author = authorRepository.findByEmail(value);
+        return author.isEmpty();
     }
 }
