@@ -1,5 +1,7 @@
 package com.deveficiente.casadocodigo.newauthor;
 
+import com.deveficiente.casadocodigo.validators.Unique;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -10,6 +12,7 @@ public class NewAuthorRequest {
     @NotBlank(message = "Field 'name' must not be empty")
     private final String name;
 
+    @Unique(message="'Email' already in use")
     @NotBlank(message = "Field 'email' must not be null")
     @Email
     private final String email;
